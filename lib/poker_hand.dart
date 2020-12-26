@@ -40,21 +40,23 @@ class Hand {
     return highestCard;
   }
 
-  bool onePair() {
+  PokerOutput onePair() {
     var result = false;
+    var card; 
     
     pokerHandValue.asMap().forEach((i, element) => {
       pokerHandValue.asMap().forEach((ii, element2) => {
         if (element == element2 && i != ii) {
-          result = true //TODO: break?
+          result = true, //TODO: break?
+          card = element
         }
       }),
     });
     
-    return result;
+    return PokerOutput(result, card);
   }
 
-  bool twoPair() {
+  PokerOutput twoPair() { //TODO: die hand hält die indexe aber unten werden die elemente ansich  gebraucht
     var counter = 0;
     var hand = [];
 
@@ -67,18 +69,26 @@ class Hand {
         }
       }),
     });
+
+    var card = pokerHandValue[hand[0]];
+
+    hand.forEach((element) => {
+      if (element > card) element = card
+    });
     
-    return counter > 1;
+    return PokerOutput(counter > 1, card);
   }
 
   bool threeOfAKind() {
     var result = false;
+    var hand = [];
 
     pokerHandValue.asMap().forEach((i, element) => {
       pokerHandValue.asMap().forEach((ii, element2) => {
         pokerHandValue.asMap().forEach((iii, element3) => {
           if (element == element2 && element2 == element3 && i != ii && i != iii && ii != iii) {
-            result = true //TODO: break?
+            result = true, //TODO: break?
+            hand.add(element)
           }
         })
       })
@@ -151,4 +161,11 @@ class Hand {
       return false;
     }
   }
+}
+
+class PokerOutput{
+  bool result;
+  int card;
+
+  PokerOutput(bool result, int card);
 }
